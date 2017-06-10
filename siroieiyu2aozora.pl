@@ -1,12 +1,12 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:56:24 JST
+# last updated : 2017/06/10 13:57:39 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
 # license GPLv2
 #
 # Usage
-# ./siroieiyu2aozora.pl > 出力フアィル名
+# ./siroieiyu2aozora.pl > 出力ファイル名
 #
 
 
