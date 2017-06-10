@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 17:43:43 JST
+# last updated : 2017/06/10 19:20:44 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -59,6 +59,8 @@ sub get_honbun {
   $item =~  s|、\n|、|g; #読点での余計な改行を削除
   $item =~  s|《|<<|g; #青空用に置換
   $item =~  s|》|>>|g; #青空用に置換
+  $item =~  s|！！|!!|g;
+  $item =~  s|！？|!\?|g;
   return $item;
 }
 
