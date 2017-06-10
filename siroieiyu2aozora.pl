@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:52:59 JST
+# last updated : 2017/06/10 13:56:24 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -71,6 +71,7 @@ sub ins_header {
 	my $bun = &get_contents($index[$i]);
 	utf8::decode($bun);
 	my $title =  &get_title($bun);
+	$title =~ tr/０-９/0-9/;
 	print "［＃改ページ］\n";
 	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
 	print "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n";
