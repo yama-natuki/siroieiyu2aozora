@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:45:59 JST
+# last updated : 2017/06/10 13:47:59 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -9,7 +9,7 @@
 # ./siroieiyu2aozora.pl > 出力フアィル名
 #
 
-#
+
 use strict;
 use warnings;
 use LWP::UserAgent;
@@ -30,7 +30,6 @@ sub get_contents {
 sub get_index {
   my $address = shift;
   my $index = &get_contents( $address );
-  #my $index = slurp($address);
   utf8::decode($index);
   $index =~ s|^.+第一部</span>|第一部|s;
   $index =~ s|<div class=\"fc2_footer.+$||s;
@@ -66,7 +65,7 @@ sub ins_header {
 #
 {
   print &ins_header;
-  my @index = split('\n', &get_index($url)); # url list
+  my @index = split('\n', &get_index($url));
   for ( my $i = 0; $i < 5; $i++) {
 	my $bun = &get_contents($index[$i]);
 	utf8::decode($bun);
