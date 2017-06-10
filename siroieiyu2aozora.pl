@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 12:19:04 JST
+# last updated : 2017/06/10 13:12:52 JST
 #
 #
 #
@@ -8,6 +8,7 @@ use warnings;
 use LWP::UserAgent;
 use utf8;
 binmode STDOUT, ":utf8";
+use Perl6::Slurp; # http://d.hatena.ne.jp/minesouta/20071204/p1
 
 my $url = "http://nemuiyon.blog72.fc2.com/blog-category-2.html"; #index
 
@@ -21,13 +22,11 @@ sub get_contents {
 
 sub get_index {
   my $address = shift;
-  #my $index = &get_contents( $address );
-  use Perl6::Slurp; # http://d.hatena.ne.jp/minesouta/20071204/p1
-  my $index = slurp('/tmp/test.html');
+  my $index = &get_contents( $address );
+  #my $index = slurp($address);
   utf8::decode($index);
   $index =~ s|^.+第一部</span>|第一部|s;
   $index =~ s|<div class=\"fc2_footer.+$||s;
-  # url list
   $index =~ s|<a href|\n<a href|g;
   $index =~ s|第一部.+\n||;
   $index =~ s|<a href=\"([^\"]*)\".*|$1|g;
@@ -55,19 +54,31 @@ sub get_honbun {
 }
 
 sub ins_header {
-  printf( "%s",  "［＃５字下げ］［＃窓大見出し］白衣の英雄［＃窓大見出し終わり］\n");
-  printf( "%s", "■■■■■■■■■■■■■■■■■■■■■■■■■■\n\n");
-#insert $s2;
-  printf( "%s", "■■■■■■■■■■■■■■■■■■■■■■■■■■\n");
+  printf( "%s", "白衣の英雄\n");
+  printf( "%s", "九重十造\n\n\n");
 }
 
 #
 {
-  print "\n";
   print &ins_header;
-  print "［＃改ページ］\n";
-  print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
-  print "\n［＃中見出し］" . &get_title($book) . "［＃中見出し終わり］\n\n\n";
-  print &get_honbun($book);
-  print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+  my @index = split('\n', &get_index($url)); # url list
+  for ( my $i = 0; $i < 5; $i++) {
+	my $bun = &get_contents($index[$i]);
+	utf8::decode($bun);
+	print "［＃改ページ］\n";
+	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+	print "\n［＃中見出し］" . &get_title($bun) . "［＃中見出し終わり］\n\n\n";
+	print &get_honbun($bun);
+	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+	sleep 2; # 負荷をかけないように。
+  }
+#  print $_ . "\n" for @index;
+#  print get_index('/tmp/test.html');
+#  print "\n";
+ # print &ins_header;
+#  print "［＃改ページ］\n";
+#  print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+#  print "\n［＃中見出し］" . &get_title($book) . "［＃中見出し終わり］\n\n\n";
+#  print &get_honbun($book);
+#  print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
 }
