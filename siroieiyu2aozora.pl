@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:40:33 JST
+# last updated : 2017/06/10 13:40:50 JST
 #
 #
 #
@@ -70,6 +70,6 @@ sub ins_header {
 	print STDERR $title . " ::取得完了\n";
 	print &get_honbun($bun);
 	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
-	sleep 2; # 負荷をかけないように。
+	sleep 1; # 負荷をかけないように。
   }
 }
