@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:57:39 JST
+# last updated : 2017/06/10 14:33:50 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -58,8 +58,8 @@ sub get_honbun {
 }
 
 sub ins_header {
-  printf( "%s", "白衣の英雄\n");
-  printf( "%s", "九重十造\n\n\n");
+  print "白衣の英雄\n";
+  print "九重十造\n\n\n";
 }
 
 #
