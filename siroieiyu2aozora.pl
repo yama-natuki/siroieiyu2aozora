@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:37:32 JST
+# last updated : 2017/06/10 13:40:33 JST
 #
 #
 #
@@ -9,7 +9,6 @@ use LWP::UserAgent;
 use utf8;
 binmode STDOUT, ":utf8";
 binmode STDERR, ":utf8";
-use Perl6::Slurp; # http://d.hatena.ne.jp/minesouta/20071204/p1
 
 my $url = "http://nemuiyon.blog72.fc2.com/blog-category-2.html"; #index
 
@@ -33,9 +32,6 @@ sub get_index {
   $index =~ s|<a href=\"([^\"]*)\".*|$1|g;
   return $index;
 }
-
-my $book = slurp('/tmp/book.html');
-utf8::decode($book);
 
 sub get_title {
   my $item = shift;
