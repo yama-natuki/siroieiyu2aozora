@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:12:52 JST
+# last updated : 2017/06/10 13:28:20 JST
 #
 #
 #
@@ -48,6 +48,7 @@ sub get_honbun {
   my $honbun = $1;
   $honbun =~  s|<br />|\n|g;
   $honbun =~  s|\t\t\t<br>\t\t\t\t<a name=\"more\" id=\"more\"></a>||g;
+  $honbun =~  s|、\n|、|g; #読点での余計な改行を削除
   $honbun =~  s|《|<<|g; #青空用に置換
   $honbun =~  s|》|>>|g; #青空用に置換
   return $honbun;
