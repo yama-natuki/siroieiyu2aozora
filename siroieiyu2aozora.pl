@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 13:28:20 JST
+# last updated : 2017/06/10 13:37:32 JST
 #
 #
 #
@@ -8,6 +8,7 @@ use warnings;
 use LWP::UserAgent;
 use utf8;
 binmode STDOUT, ":utf8";
+binmode STDERR, ":utf8";
 use Perl6::Slurp; # http://d.hatena.ne.jp/minesouta/20071204/p1
 
 my $url = "http://nemuiyon.blog72.fc2.com/blog-category-2.html"; #index
@@ -66,20 +67,13 @@ sub ins_header {
   for ( my $i = 0; $i < 5; $i++) {
 	my $bun = &get_contents($index[$i]);
 	utf8::decode($bun);
+	my $title =  &get_title($bun);
 	print "［＃改ページ］\n";
 	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
-	print "\n［＃中見出し］" . &get_title($bun) . "［＃中見出し終わり］\n\n\n";
+	print "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n";
+	print STDERR $title . " ::取得完了\n";
 	print &get_honbun($bun);
 	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
 	sleep 2; # 負荷をかけないように。
   }
-#  print $_ . "\n" for @index;
-#  print get_index('/tmp/test.html');
-#  print "\n";
- # print &ins_header;
-#  print "［＃改ページ］\n";
-#  print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
-#  print "\n［＃中見出し］" . &get_title($book) . "［＃中見出し終わり］\n\n\n";
-#  print &get_honbun($book);
-#  print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
 }
