@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 12:05:25 JST
+# last updated : 2017/06/10 12:19:04 JST
 #
 #
 #
@@ -19,30 +19,20 @@ sub get_contents {
   return $content;
 }
 
-#my $index = &get_contents( $url );
-use Perl6::Slurp; # http://d.hatena.ne.jp/minesouta/20071204/p1
-my $index = slurp('/tmp/test.html');
-utf8::decode($index);
-$index =~ s|^.+第一部</span>|第一部|s;
-$index =~ s|<div class=\"fc2_footer.+$||s;
-my $mokuji = $index;
-# 見出し list
-$index =~ s|<br />　<br />|<br />|g;
-$index =~ s|<br />|\n|g;
-$index =~ s| +<br>||g;
-$index =~ s|<a href=.+?>||g;
-$index =~ s|<span style=\"font-size:large;\">||g;
-$index =~ s|</span>||g;
-$index =~ s|</a>||g;
-$index =~ s|\n\n|\n|g;
-$index =~ tr/０-９/0-9/;
-print $index . "\n";
-
-# url list
-$mokuji =~ s|<a href|\n<a href|g;
-$mokuji =~ s|第一部.+\n||;
-$mokuji =~ s|<a href=\"([^\"]*)\".*|$1|g;
-#print $mokuji;
+sub get_index {
+  my $address = shift;
+  #my $index = &get_contents( $address );
+  use Perl6::Slurp; # http://d.hatena.ne.jp/minesouta/20071204/p1
+  my $index = slurp('/tmp/test.html');
+  utf8::decode($index);
+  $index =~ s|^.+第一部</span>|第一部|s;
+  $index =~ s|<div class=\"fc2_footer.+$||s;
+  # url list
+  $index =~ s|<a href|\n<a href|g;
+  $index =~ s|第一部.+\n||;
+  $index =~ s|<a href=\"([^\"]*)\".*|$1|g;
+  return $index;
+}
 
 my $book = slurp('/tmp/book.html');
 utf8::decode($book);
