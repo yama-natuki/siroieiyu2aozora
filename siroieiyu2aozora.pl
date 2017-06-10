@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 14:34:48 JST
+# last updated : 2017/06/10 17:13:26 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -18,6 +18,7 @@ binmode STDOUT, ":utf8";
 binmode STDERR, ":utf8";
 
 my $url = "http://nemuiyon.blog72.fc2.com/blog-category-2.html"; #index
+my $separator = "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
 
 sub get_contents {
   my $address = shift;
@@ -73,11 +74,11 @@ sub ins_header {
 	my $title =  &get_title($bun);
 	$title =~ tr/０-９/0-9/;
 	print "［＃改ページ］\n";
-	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+	print $separator;
 	print "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n";
 	print STDERR $title . " ::取得完了\n";
 	print &get_honbun($bun);
-	print "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+	print $separator;
 	sleep 1; # 負荷をかけないように。
   }
 }
