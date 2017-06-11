@@ -1,12 +1,13 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 12:47:09 JST
+# last updated : 2017/06/11 12:55:56 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
+# 512kbごとにファイルを分割して保存します。
 # Copyright (c) 2017 ◆.nITGbUipI
 # license GPLv2
 #
 # Usage
-# ./siroieiyu2aozora.pl > 出力ファイル名
+# ./siroieiyu2aozora.pl
 #
 
 
@@ -16,6 +17,8 @@ use LWP::UserAgent;
 use utf8;
 binmode STDOUT, ":utf8";
 binmode STDERR, ":utf8";
+
+my $bunkatu = 1; # 512kbごとに分割する。1ファイルで標準出力に出したい場合は 0 にする。
 
 my $url = "http://nemuiyon.blog72.fc2.com/blog-category-2.html"; #index
 my $separator = "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
@@ -112,7 +115,10 @@ sub get_write_all {
 
 #
 {
-#  print $header;
-#  &get_all;
-  &get_write_all;
+  if ( $bunkatu == 0 ){
+	print $header;
+	&get_all;
+  } else {
+	&get_write_all;
+  }
 }
