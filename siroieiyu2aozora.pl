@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 10:36:36 JST
+# last updated : 2017/06/11 10:39:46 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -22,6 +22,7 @@ my $separator = "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲
 my $kaipage = "［＃改ページ］\n";
 my $main_title= "白衣の英雄";
 my $author = "九重十造";
+my $header =  $main_title . "\n" . $author . "\n\n\n";
 my $base_name = 'shiroi_eiyu-';
 my @book;
 
@@ -67,13 +68,9 @@ sub get_honbun {
   return $item;
 }
 
-sub ins_header {
-  return $main_title . "\n" . $author . "\n\n\n";
-}
-
 sub get_book {
   my $size;
-  push( @book, &ins_header );
+  push( @book, $header );
   my @index = split('\n', &get_index($url));
   my $count = $#index;
   for ( my $i = 0; $i < $count; $i++) {
@@ -88,7 +85,7 @@ sub get_book {
 }
 
 sub get_all {
-  print &ins_header;
+  print $header;
   my @index = split('\n', &get_index($url));
   my $count = $#index;
 #  my $count = 4; # debug
