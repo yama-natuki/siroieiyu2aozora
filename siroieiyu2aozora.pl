@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/10 19:39:42 JST
+# last updated : 2017/06/11 10:36:36 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -19,9 +19,11 @@ binmode STDERR, ":utf8";
 
 my $url = "http://nemuiyon.blog72.fc2.com/blog-category-2.html"; #index
 my $separator = "▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼▲▼\n";
+my $kaipage = "［＃改ページ］\n";
 my $main_title= "白衣の英雄";
 my $author = "九重十造";
 my $base_name = 'shiroi_eiyu-';
+my @book;
 
 sub get_contents {
   my $address = shift;
@@ -66,10 +68,23 @@ sub get_honbun {
 }
 
 sub ins_header {
-  my $header;
-  $header = sprintf("%s", $main_title . "\n");
-  $header = $header . sprintf("%s", $author . "\n\n\n");
-  return $header;
+  return $main_title . "\n" . $author . "\n\n\n";
+}
+
+sub get_book {
+  my $size;
+  push( @book, &ins_header );
+  my @index = split('\n', &get_index($url));
+  my $count = $#index;
+  for ( my $i = 0; $i < $count; $i++) {
+	my $bun = &get_contents($index[$i]);
+	utf8::decode($bun);
+	my $title =  &get_title($bun);
+	my $item = $kaipage . $separator . "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n" . &get_honbun($bun) . $separator;
+	print STDERR $title . " ::取得完了\n";
+	push( @book, $item );
+	sleep 2; # 負荷をかけないように
+  }
 }
 
 sub get_all {
