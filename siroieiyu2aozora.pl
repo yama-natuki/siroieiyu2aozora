@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 10:39:46 JST
+# last updated : 2017/06/11 11:34:35 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -69,18 +69,23 @@ sub get_honbun {
 }
 
 sub get_book {
-  my $size;
-  push( @book, $header );
+  my $i = shift;
+  my $bun = &get_contents($i);
+  utf8::decode($bun);
+  my $title = &get_title($bun);
+  my $item = $kaipage . $separator . "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n" . &get_honbun($bun) . $separator;
+  print STDERR $title . " ::取得完了\n";
+  return $item ;
+}
+
+sub get_all_book {
   my @index = split('\n', &get_index($url));
-  my $count = $#index;
+#  my $count = $#index;
+  my $count = 4; # debug
   for ( my $i = 0; $i < $count; $i++) {
-	my $bun = &get_contents($index[$i]);
-	utf8::decode($bun);
-	my $title =  &get_title($bun);
-	my $item = $kaipage . $separator . "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n" . &get_honbun($bun) . $separator;
-	print STDERR $title . " ::取得完了\n";
-	push( @book, $item );
-	sleep 2; # 負荷をかけないように
+	my $x = &get_book( $index[$i]);
+	print $x;
+	sleep 2;
   }
 }
 
@@ -105,5 +110,6 @@ sub get_all {
 
 #
 {
-  &get_all;
+#  &get_all;
+  &get_all_book;
 }
