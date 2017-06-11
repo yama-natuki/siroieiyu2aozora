@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 11:34:35 JST
+# last updated : 2017/06/11 11:37:16 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -78,7 +78,7 @@ sub get_book {
   return $item ;
 }
 
-sub get_all_book {
+sub get_all {
   my @index = split('\n', &get_index($url));
 #  my $count = $#index;
   my $count = 4; # debug
@@ -89,27 +89,8 @@ sub get_all_book {
   }
 }
 
-sub get_all {
-  print $header;
-  my @index = split('\n', &get_index($url));
-  my $count = $#index;
-#  my $count = 4; # debug
-  for ( my $i = 0; $i < $count; $i++) {
-	my $bun = &get_contents($index[$i]);
-	utf8::decode($bun);
-	my $title =  &get_title($bun);
-	print "［＃改ページ］\n";
-	print $separator;
-	print "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n";
-	print STDERR $title . " ::取得完了\n";
-	print &get_honbun($bun);
-	print $separator;
-	sleep 1; # 負荷をかけないように。
-  }
-}
-
 #
 {
-#  &get_all;
-  &get_all_book;
+  print $header;
+  &get_all;
 }
