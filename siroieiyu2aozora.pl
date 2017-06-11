@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 12:09:18 JST
+# last updated : 2017/06/11 12:45:11 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # Copyright (c) 2017 ◆.nITGbUipI
@@ -24,7 +24,6 @@ my $main_title= "白衣の英雄";
 my $author = "九重十造";
 my $header =  $main_title . "\n" . $author . "\n\n\n";
 my $base_name = 'shiroi_eiyu-';
-my @book;
 
 sub get_contents {
   my $address = shift;
@@ -93,18 +92,38 @@ sub get_all {
 
 sub split_write {
   my ($fnumber, $item) = @_;
-  my $fname = $base_name . sprintf("3d", $fnumber) . ".txt";
+  my $fname = $base_name . sprintf("%03d", $fnumber) . ".txt";
   open (my $FILE, ">>" ,"$fname") or die "$!";
   print $FILE $item;
   my $size = (-s $FILE);
   print STDERR $size . "\n";
   close( $FILE );
-  $size = (-s $fname );
-  print STDERR $size . "\n";
+}
+
+sub get_write_all {
+  my @index = split('\n', &get_index($url));
+  my $count = $#index;
+  my $fcount = 1;
+  my $FILE;
+  for ( my $i = 0; $i < $count; $i++) {
+	my $x = &get_book( $index[$i]);
+	my $fname = $base_name . sprintf("%03d", $fcount) . ".txt";
+	open ( $FILE, ">>:utf8" ,"$fname") or die "$!";
+	if ($i == 0) { print $FILE $header;}
+	print $FILE $x;
+	my $size = (-s $FILE);
+	if ($size > 512000) {
+	  close( $FILE );
+	  $fcount++;
+	}
+	sleep 2;
+  }
+  close( $FILE );
 }
 
 #
 {
-  print $header;
-  &get_all;
+#  print $header;
+#  &get_all;
+  &get_write_all;
 }
