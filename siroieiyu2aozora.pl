@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 13:39:03 JST
+# last updated : 2017/06/11 14:35:14 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -26,7 +26,7 @@ my $kaipage = "［＃改ページ］\n";
 my $main_title= "白衣の英雄";
 my $author = "九重十造";
 my $header =  $main_title . "\n" . $author . "\n\n\n";
-my $base_name = 'shiroi_eiyu-';
+my $base_name = 'hakui-';
 
 sub get_contents {
   my $address = shift;
