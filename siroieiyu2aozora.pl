@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 16:49:35 JST
+# last updated : 2017/06/12 17:15:39 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -87,11 +87,15 @@ sub replace_bangai {
 
 sub get_book {
   my $i = shift;
-  my $bun = &get_contents($i);
-  utf8::decode($bun);
-  $title = &get_title($bun);
+  my $base = &get_contents($i);
+  utf8::decode($base);
+  $title = &get_title($base);
+  my $honbun = &get_honbun;
+  if ($title =~ /番外編.*/) {
+	$honbun = &replace_bangai($honbun);
+  }
   my $midasi = "\n［＃小見出し］" . $title . "［＃小見出し終わり］\n\n\n";
-  my $item = $kaipage . $separator . $midasi . &get_honbun($bun) . $separator;
+  my $item = $kaipage . $separator . $midasi . $honbun . $separator;
   print STDERR $title . " ::取得完了\n";
   return $item ;
 }
@@ -133,7 +137,6 @@ sub get_write_all {
 	} else { # 番外編は別ファイルに書き込む。
 	  my $fname = $bangai_name . sprintf("%03d", $bcount) . ".txt";
 	  if ( -f $fname) {
-		$x = &replace_bangai($x);
 		print $fh $x;
 	  } else{
 		$x = &replace_bangai($x);
@@ -154,6 +157,11 @@ sub get_write_all {
 
 #
 {
+  # if ($ARGV[0] =~ m|https?://nemuiyon.blog72.fc2.com/|){
+  # 	my $page = &get_contents( $ARGV[0]);
+  # 	exit 0;
+  # }
+  
   if ( $bunkatu == 0 ){
 	print $header;
 	&get_all;
