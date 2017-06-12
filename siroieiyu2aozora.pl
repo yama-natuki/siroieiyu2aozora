@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 17:22:37 JST
+# last updated : 2017/06/12 17:23:32 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -90,7 +90,7 @@ sub get_book {
   my $base = &get_contents($i);
   utf8::decode($base);
   $title = &get_title($base);
-  my $honbun = &get_honbun;
+  my $honbun = &get_honbun($base);
   if ($title =~ /番外編.*/) {
 	$honbun = &replace_bangai($honbun);
   }
