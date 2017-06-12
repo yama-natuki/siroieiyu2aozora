@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 17:23:32 JST
+# last updated : 2017/06/12 17:25:10 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -159,6 +159,9 @@ sub get_write_all {
   if ($ARGV[0] =~ m|https?://nemuiyon.blog72.fc2.com/|){
   	print &get_book( $ARGV[0]);
   	exit 0;
+  } else {
+	print "URLが間違っています。\n";
+	exit 0;
   }
   
   if ( $bunkatu == 0 ){
