@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 13:28:26 JST
+# last updated : 2017/06/12 14:08:29 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -27,6 +27,8 @@ my $main_title= "白衣の英雄";
 my $author = "九重十造";
 my $header =  $main_title . "\n" . $author . "\n\n\n";
 my $base_name = 'hakui-';
+my $bangai_name = "hakui_bangaihen-";
+my $title;
 
 sub get_contents {
   my $address = shift;
@@ -74,7 +76,7 @@ sub get_book {
   my $i = shift;
   my $bun = &get_contents($i);
   utf8::decode($bun);
-  my $title = &get_title($bun);
+  $title = &get_title($bun);
   my $midasi = "\n［＃中見出し］" . $title . "［＃中見出し終わり］\n\n\n";
   my $item = $kaipage . $separator . $midasi . &get_honbun($bun) . $separator;
   print STDERR $title . " ::取得完了\n";
@@ -100,12 +102,16 @@ sub get_write_all {
   my $FILE;
   for ( my $i = 0; $i < $count; $i++) {
 	my $x = &get_book( $index[$i]);
-	if (fileno $FILE) {
-	  print $FILE $x;
-	} else {
+	if ($title =~ /白衣の英雄.*/) {
 	  my $fname = $base_name . sprintf("%03d", $fcount) . ".txt";
 	  open ( $FILE, ">>:utf8" ,"$fname") or die "$!";
 	  if ($i == 0) { print $FILE $header;}
+	  print $FILE $x;
+	} else { # 番外編は別ファイルに書き込む。
+	  close( $FILE );
+	  $fcount = 1;
+	  my $fname = $bangai_name . sprintf("%03d", $fcount) . ".txt";
+	  open ( $FILE, ">>:utf8" ,"$fname") or die "$!";
 	  print $FILE $x;
 	}
 	my $size = (-s $FILE);
