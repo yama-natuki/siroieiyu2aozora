@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 16:34:32 JST
+# last updated : 2017/06/12 16:37:24 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -133,8 +133,10 @@ sub get_write_all {
 	} else { # 番外編は別ファイルに書き込む。
 	  my $fname = $bangai_name . sprintf("%03d", $bcount) . ".txt";
 	  if ( -f $fname) {
+		$x = &replace_bangai($x);
 		print $fh $x;
 	  } else{
+		$x = &replace_bangai($x);
 		open ( $fh, ">>:utf8" ,"$fname") or die "$!";
 		print $fh $x;
 	  }
