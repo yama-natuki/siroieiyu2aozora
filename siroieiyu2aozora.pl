@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/11 14:35:14 JST
+# last updated : 2017/06/12 13:28:26 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -100,10 +100,14 @@ sub get_write_all {
   my $FILE;
   for ( my $i = 0; $i < $count; $i++) {
 	my $x = &get_book( $index[$i]);
-	my $fname = $base_name . sprintf("%03d", $fcount) . ".txt";
-	open ( $FILE, ">>:utf8" ,"$fname") or die "$!";
-	if ($i == 0) { print $FILE $header;}
-	print $FILE $x;
+	if (fileno $FILE) {
+	  print $FILE $x;
+	} else {
+	  my $fname = $base_name . sprintf("%03d", $fcount) . ".txt";
+	  open ( $FILE, ">>:utf8" ,"$fname") or die "$!";
+	  if ($i == 0) { print $FILE $header;}
+	  print $FILE $x;
+	}
 	my $size = (-s $FILE);
 	if ($size > 512000) {
 	  close( $FILE );
