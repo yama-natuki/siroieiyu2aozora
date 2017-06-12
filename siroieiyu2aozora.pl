@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 17:55:57 JST
+# last updated : 2017/06/12 18:35:18 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -48,6 +48,7 @@ sub get_contents {
   return $content;
 }
 
+# urlリストを作成
 sub get_index {
   my $address = shift;
   my $index = &get_contents( $address );
@@ -60,6 +61,7 @@ sub get_index {
   return $index;
 }
 
+# タイトルを取得して整形
 sub get_title {
   my $item = shift;
   $item =~  m|.*entry_title\">(.+)</td>.*|;
@@ -68,6 +70,7 @@ sub get_title {
   return $item;
 }
 
+#本文を取得して整形
 sub get_honbun {
   my $item = shift;
   $item =~  m|.+main_txt\">(.+)<div class.+|;
@@ -82,6 +85,7 @@ sub get_honbun {
   return $item;
 }
 
+# 番外編の本文を整形
 sub replace_bangai {
   my $item = shift;
   my @ban;
@@ -95,6 +99,7 @@ sub replace_bangai {
   return join("\n", @ban);
 }
 
+# 1ページ取得する
 sub get_book {
   my $i = shift;
   my $base = &get_contents($i);
@@ -110,6 +115,7 @@ sub get_book {
   return $item ;
 }
 
+#すべてのページを取得する
 sub get_all {
   my @index = split('\n', &get_index($url));
   my $count = $#index;
@@ -122,6 +128,7 @@ sub get_all {
   }
 }
 
+# すべてのページをファイルに書き込む
 sub get_write_all {
   my @index = split('\n', &get_index($url));
   my $count = $#index;
@@ -164,7 +171,7 @@ sub get_write_all {
   close( $fh );
 }
 
-#
+# main
 {
   if ( @ARGV == 1 ) {
 	if ($ARGV[0] =~ m|https?://nemuiyon.blog72.fc2.com/|){
