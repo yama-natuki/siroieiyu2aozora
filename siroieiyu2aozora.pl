@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# last updated : 2017/06/12 14:14:59 JST
+# last updated : 2017/06/12 14:57:39 JST
 #
 # 白衣の英雄を 取得して青空文庫形式に変換する。
 # 512kbごとにファイルを分割して保存します。
@@ -99,7 +99,8 @@ sub get_write_all {
   my @index = split('\n', &get_index($url));
   my $count = $#index;
   my $fcount = 1;
-  my $FILE;
+  my $bcount = 1;
+  my ($FILE, $fh);
   for ( my $i = 0; $i < $count; $i++) {
 	my $x = &get_book( $index[$i]);
 	if ($title =~ /白衣の英雄.*/) {
@@ -111,25 +112,29 @@ sub get_write_all {
 		if ($i == 0) { print $FILE $header;}
 		print $FILE $x;
 	  }
-	} else { # 番外編は別ファイルに書き込む。
-	  close( $FILE );
-	  $fcount = 1;
-	  my $fname = $bangai_name . sprintf("%03d", $fcount) . ".txt";
-	  if ( -f $fname) {
-		print $FILE $x;
-	  } else{
-		open ( $FILE, ">>:utf8" ,"$fname") or die "$!";
-		print $FILE $x;
+	  my $size = (-s $FILE);
+	  if ($size > 512000) {
+		close( $FILE );
+		$fcount++;
 	  }
-	}
-	my $size = (-s $FILE);
-	if ($size > 512000) {
-	  close( $FILE );
-	  $fcount++;
+	} else { # 番外編は別ファイルに書き込む。
+	  my $fname = $bangai_name . sprintf("%03d", $bcount) . ".txt";
+	  if ( -f $fname) {
+		print $fh $x;
+	  } else{
+		open ( $fh, ">>:utf8" ,"$fname") or die "$!";
+		print $fh $x;
+	  }
+	  my $size = (-s $fh);
+	  if ($size > 512000) {
+		close( $fh );
+		$bcount++;
+	  }
 	}
 	sleep 2;
   }
   close( $FILE );
+  close( $fh );
 }
 
 #
